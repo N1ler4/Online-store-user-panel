@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getDataFromCookie, saveDataFromCookie } from "@token-service";
+import { getDataFromCookie, saveDataToCookie } from "@token-service";
 
 const http = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
@@ -24,8 +24,8 @@ async function refreshAccsesToken() {
       );
       const { access_token, refresh_token } = response.data;
       console.log(access_token);
-      saveDataFromCookie("token", access_token);
-      saveDataFromCookie("refresh_token", refresh_token);
+      saveDataToCookie("token", access_token);
+      saveDataToCookie("refresh_token", refresh_token);
       return access_token;
     }
   } catch (error) { 

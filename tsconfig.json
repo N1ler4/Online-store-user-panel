@@ -17,6 +17,7 @@
       "@router": ["./src/router"],
       "@router-root": ["./src/router/root"],
       "@service": ["./src/service"],
+      "@modals": ["./src/components/modals"],
       "@products": ["./src/service/products"],
       "@token-service" : ["./src/utils/tokenService"],
       "@http": ["./src/service/config/http"],
