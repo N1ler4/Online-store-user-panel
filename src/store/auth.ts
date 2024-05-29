@@ -9,6 +9,7 @@ const useAuthStore = create(() => ({
       const response = await http.post("/login", payload);
       if (response.status === 200) {
         saveDataToCookie("token", response?.data?.access_token);
+        saveDataToCookie("refresh_token" , response?.data?.refresh_token)
         return response
       }
       

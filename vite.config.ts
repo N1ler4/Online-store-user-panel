@@ -16,6 +16,7 @@ export default defineConfig({
       { find: "@service", replacement: "/src/service" },
       { find: "@products", replacement: "/src/service/products" },
       { find: "@store", replacement: "/src/store" },
+      { find: "@store-product", replacement: "/src/store/product" },
       { find: "@utils", replacement: "/src/utils" },
       { find: "@modals", replacement: "/src/components/modals" },
       { find: "@token-service", replacement: "/src/utils/tokenService" },
