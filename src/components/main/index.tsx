@@ -5,6 +5,8 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { saveDataToCookie } from "@token-service";
 import { useLocation, useNavigate } from "react-router-dom";
+import Stack from "@mui/material/Stack";
+import Pagination from "@mui/material/Pagination";
 
 export default function Main({ searchTerm }: any) {
   const navigate = useNavigate();
@@ -21,7 +23,7 @@ export default function Main({ searchTerm }: any) {
     searchParams.set("page", String(page));
     navigate(`?${searchParams}`);
     try {
-      const res = await product(page, 8);
+      const res = await product(page, 10);
       if (res && res.status === 200) {
         setData(res.data.products);
       } else {
@@ -49,6 +51,13 @@ export default function Main({ searchTerm }: any) {
   if (error) {
     return <div>{error}</div>;
   }
+
+  const handlePageChange = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPage(value);
+  };
 
   return (
     <div>
@@ -117,30 +126,15 @@ export default function Main({ searchTerm }: any) {
         )}
       </div>
 
-      <div className="flex justify-center items-center gap-3">
-        <button
-          className="py-2 px-3 bg-red-700 text-white rounded-lg"
-          onClick={() => {
-            if (data.length < 1) {
-              setPage(page - 1);
-            } else {
-              setPage(1);
-            }
-          }}
-        >
-          -
-        </button>
-        <p>{page}</p>
-        <button
-          className="py-2 px-3 bg-green-700 text-white rounded-lg"
-          onClick={() => {
-            if (data.length > 8) {
-              setPage(page + 1);
-            }
-          }}
-        >
-          +
-        </button>
+      <div className="flex justify-center mt-4">
+        <Stack spacing={2}>
+          <Pagination
+            count={Math.ceil(data.length/8)}
+            page={page}
+            onChange={handlePageChange}
+            color="primary"
+          />
+        </Stack>
       </div>
     </div>
   );

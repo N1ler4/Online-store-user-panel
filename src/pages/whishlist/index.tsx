@@ -49,7 +49,7 @@ export default function index() {
     <div className="container mx-auto">
       <Header />
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-3">
-        {data.length > 0 ? (
+        {data?.length > 0 ? (
           data.map((item: any) => (
             <div
               key={item.id}
