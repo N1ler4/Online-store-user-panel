@@ -1,9 +1,11 @@
 import useProductStore from "@store-product";
 import { useEffect, useState } from "react";
 import { Carousel } from "@components";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 export default function Index() {
-  const { product , like } = useProductStore();
+  const { product, like } = useProductStore();
   const [data, setData] = useState([]);
   console.log(data);
   const [loading, setLoading] = useState<boolean>(true);
@@ -35,8 +37,6 @@ export default function Index() {
   if (error) {
     return <div>{error}</div>;
   }
-
-
 
   return (
     <div>
@@ -77,21 +77,23 @@ export default function Index() {
                   <span className="text-red-300 line-through ml-2">
                     ${item.cost}
                   </span>
-                </p>
-                <div className="flex justify-between">
-                  {" "}
+                </p>{" "}
+                <div className="flex justify-between3">
+                  <div className="flex">
+                    <button
+                      className="text-red-700 rounded-lg px-4 py-2"
+                      onClick={() => {
+                        like(item.product_id);
+                      }}
+                    >
+                      <FavoriteIcon />
+                    </button>
+                    <button className="text-gray-700 rounded-lg px-4 py-2">
+                      <ShoppingCartIcon />
+                    </button>
+                  </div>
                   <button className="bg-blue-500 text-white rounded-lg px-4 py-2">
                     View
-                  </button>
-                  <button className="bg-blue-500 text-white rounded-lg px-4 py-2" onClick={
-                    () => {
-                      like(item.product_id)
-                    }
-                  }>
-                    Like
-                  </button>
-                  <button className="bg-blue-500 text-white rounded-lg px-4 py-2">
-                    Add
                   </button>
                 </div>
               </div>
