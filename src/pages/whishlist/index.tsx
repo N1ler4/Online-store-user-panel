@@ -3,13 +3,18 @@ import useWishStore from "../../store/wishlist";
 import { useEffect, useState } from "react";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useNavigate } from "react-router-dom";
+import { saveDataToCookie } from "@token-service";
+import useProductStore from "@store-product";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+
 
 export default function index() {
   const [data, setData] = useState([]);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const { wishlist } = useWishStore();
+  const { like } = useProductStore();
 
   const getProduct = async () => {
     try {
@@ -83,10 +88,20 @@ export default function index() {
                     <button className="text-gray-700 rounded-lg px-4 py-2">
                       <ShoppingCartIcon />
                     </button>
+                    <button
+                      className="text-red-700 rounded-lg px-4 py-2"
+                      onClick={() => like(item.product_id)}
+                    >
+                      <FavoriteIcon />
+                    </button>
                   </div>
-                  <button className="bg-blue-500 text-white rounded-lg px-4 py-2" onClick={()=>{
-                    navigate(`/${item.product_id}`)
-                  }}>
+                  <button
+                    className="bg-blue-500 text-white rounded-lg px-4 py-2"
+                    onClick={() => {
+                      saveDataToCookie("productId", item.product_id);
+                      navigate(`/${item.product_id}`);
+                    }}
+                  >
                     View
                   </button>
                 </div>

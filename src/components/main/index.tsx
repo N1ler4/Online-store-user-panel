@@ -1,13 +1,15 @@
-import useProductStore from "@store-product";
 import { useEffect, useState } from "react";
+import useProductStore from "@store-product";
 import { Carousel } from "@components";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { saveDataToCookie } from "@token-service";
+import { useNavigate } from "react-router-dom";
 
-export default function Index() {
+export default function Main({ searchTerm }:any) {
+  const navigate = useNavigate();
   const { product, like } = useProductStore();
   const [data, setData] = useState([]);
-  console.log(data);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,6 +32,10 @@ export default function Index() {
     getProduct();
   }, []);
 
+  const filteredData = data.filter((item: any) =>
+    item.product_name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -41,10 +47,9 @@ export default function Index() {
   return (
     <div>
       <Carousel />
-
       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-3">
-        {data.length > 0 ? (
-          data.map((item: any) => (
+        {filteredData.length > 0 ? (
+          filteredData.map((item: any) => (
             <div
               key={item.id}
               className="bg-white shadow-lg rounded-lg p-6 flex flex-col justify-between w-full hover:shadow-xl transition-shadow duration-300"
@@ -77,22 +82,24 @@ export default function Index() {
                   <span className="text-red-300 line-through ml-2">
                     ${item.cost}
                   </span>
-                </p>{" "}
-                <div className="flex justify-between3">
-                  <div className="flex">
-                    <button
-                      className="text-red-700 rounded-lg px-4 py-2"
-                      onClick={() => {
-                        like(item.product_id);
-                      }}
-                    >
-                      <FavoriteIcon />
-                    </button>
-                    <button className="text-gray-700 rounded-lg px-4 py-2">
-                      <ShoppingCartIcon />
-                    </button>
-                  </div>
-                  <button className="bg-blue-500 text-white rounded-lg px-4 py-2">
+                </p>
+                <div className="flex justify-between">
+                  <button
+                    className="text-red-700 rounded-lg px-4 py-2"
+                    onClick={() => like(item.product_id)}
+                  >
+                    <FavoriteIcon />
+                  </button>
+                  <button className="text-gray-700 rounded-lg px-4 py-2">
+                    <ShoppingCartIcon />
+                  </button>
+                  <button
+                    className="bg-blue-500 text-white rounded-lg px-4 py-2"
+                    onClick={() => {
+                      saveDataToCookie("productId", item.product_id);
+                      navigate(`/${item.product_id}`);
+                    }}
+                  >
                     View
                   </button>
                 </div>
