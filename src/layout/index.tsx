@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Header, Main } from "@components";
 
 export default function MainLayout() {
+
+
   const [searchTerm, setSearchTerm] = useState("");
+
 
   const handleSearchChange = (newSearchTerm: string) => {
     setSearchTerm(newSearchTerm);

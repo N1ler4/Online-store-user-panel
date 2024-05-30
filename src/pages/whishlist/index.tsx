@@ -41,6 +41,7 @@ export default function index() {
   }
 
   if (error) {
+    setTimeout(()=>{},1000) 
     return <div>{error}</div>;
   }
 

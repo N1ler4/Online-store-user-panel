@@ -4,18 +4,24 @@ import { Carousel } from "@components";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { saveDataToCookie } from "@token-service";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export default function Main({ searchTerm }:any) {
+export default function Main({ searchTerm }: any) {
   const navigate = useNavigate();
   const { product, like } = useProductStore();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<any>([]);
+  console.log(data);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
 
   const getProduct = async () => {
+    searchParams.set("page", String(page));
+    navigate(`?${searchParams}`);
     try {
-      const res = await product(1, 10);
+      const res = await product(page, 8);
       if (res && res.status === 200) {
         setData(res.data.products);
       } else {
@@ -30,10 +36,10 @@ export default function Main({ searchTerm }:any) {
 
   useEffect(() => {
     getProduct();
-  }, []);
+  }, [page]);
 
   const filteredData = data.filter((item: any) =>
-    item.product_name.toLowerCase().includes(searchTerm.toLowerCase())
+    item?.product_name?.toLowerCase()?.includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
@@ -109,6 +115,32 @@ export default function Main({ searchTerm }:any) {
         ) : (
           <p>No products found</p>
         )}
+      </div>
+
+      <div className="flex justify-center items-center gap-3">
+        <button
+          className="py-2 px-3 bg-red-700 text-white rounded-lg"
+          onClick={() => {
+            if (data.length < 1) {
+              setPage(page - 1);
+            } else {
+              setPage(1);
+            }
+          }}
+        >
+          -
+        </button>
+        <p>{page}</p>
+        <button
+          className="py-2 px-3 bg-green-700 text-white rounded-lg"
+          onClick={() => {
+            if (data.length > 8) {
+              setPage(page + 1);
+            }
+          }}
+        >
+          +
+        </button>
       </div>
     </div>
   );
